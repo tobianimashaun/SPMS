@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Register</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <style>
+    body {
+    background: url("{{ url_for('static', filename='images/background.jpg') }}") no-repeat center center fixed;
+    background-size: cover;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+
+    .register-card {
+      background: white;
+      border-radius: 10px;
+      padding: 30px;
+      max-width: 400px;
+      margin: 70px auto;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px 40px 10px 10px;
+      margin: 10px 0;
+      box-sizing: border-box;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .password-toggle {
+      position: relative;
+    }
+
+    .toggle-btn {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 0.85em;
+      color: #007bff;
+    }
+
+    .caps-warning,
+    .strength-warning {
+      font-size: 0.85em;
+      color: darkorange;
+      display: none;
+    }
+
+    button[type="submit"] {
+      width: 100%;
+      padding: 10px;
+      background-color: #007bff;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+
+    p {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    a {
+      color: #007bff;
+      text-decoration: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="register-card animate__animated animate__fadeIn">
+    <h2>Register</h2>
+    <form action="{{ url_for('register') }}" method="POST" onsubmit="return validateForm();">
+      <input type="text" name="username" placeholder="Username" required>
+
+      <div class="password-toggle">
+        <input type="password" id="password" name="password" placeholder="Password" required onkeyup="checkCapsLock(event); checkStrength();">
+        <span class="toggle-btn" onclick="toggleVisibility('password')">Show</span>
+      </div>
+
+      <div class="password-toggle">
+        <input type="password" id="confirm" placeholder="Confirm Password" required>
+        <span class="toggle-btn" onclick="toggleVisibility('confirm')">Show</span>
+      </div>
+
+      <div id="caps-warning" class="caps-warning">Warning: CAPS LOCK is ON</div>
+      <div id="strength-warning" class="strength-warning">
+        Password must be 8+ characters, include uppercase, lowercase, numbers, and special character.
+      </div>
+
+      <button type="submit">Register</button>
+    </form>
+    <p>Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
+  </div>
+
+  <script>
+    function toggleVisibility(fieldId) {
+      const field = document.getElementById(fieldId);
+      const btn = field.nextElementSibling;
+      if (field.type === "password") {
+        field.type = "text";
+        btn.textContent = "Hide";
+      } else {
+        field.type = "password";
+        btn.textContent = "Show";
+      }
+    }
+
+    function checkCapsLock(event) {
+      const warning = document.getElementById("caps-warning");
+      const isCaps = event.getModifierState && event.getModifierState("CapsLock");
+      warning.style.display = isCaps ? "block" : "none";
+    }
+
+    function checkStrength() {
+      const pw = document.getElementById("password").value;
+      const warning = document.getElementById("strength-warning");
+      const strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_\-#]).{8,}$/;
+
+      warning.style.display = !strongRegex.test(pw) ? "block" : "none";
+    }
+
+    function validateForm() {
+      const pw = document.getElementById("password").value;
+      const confirm = document.getElementById("confirm").value;
+      const strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_\-#]).{8,}$/;
+
+      if (pw !== confirm) {
+        alert("❌ Passwords do not match!");
+        return false;
+      }
+
+      if (!strongRegex.test(pw)) {
+        alert("❌ Password is not strong enough!");
+        return false;
+      }
+
+      return true;
+    }
+  </script>
+</body>
+</html>

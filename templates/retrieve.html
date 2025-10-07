@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Retrieve Password</title>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+  <style>
+    body {
+      background: url("{{ url_for('static', filename='images/background.jpg') }}") no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    .retrieve-box {
+      max-width: 450px;
+      margin: 80px auto;
+      background-color: rgba(255, 255, 255, 0.93);
+      border-radius: 15px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    .retrieve-box h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      margin-top: 15px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      background-color: #0056b3;
+    }
+
+    .password-box {
+      font-size: 18px;
+      font-weight: bold;
+      padding: 20px;
+      background-color: #e0f7fa;
+      border-radius: 10px;
+      margin-top: 30px;
+      word-break: break-word;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .copy-btn {
+      background-color: #0056b3;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .copy-btn:hover {
+      background-color: #0056b3;
+    }
+
+    .copy-msg {
+      color: #0056b3;
+      font-size: 0.9rem;
+      margin-top: 10px;
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="retrieve-box animate__animated animate__fadeInDown">
+    <h2>Retrieve Your Password</h2>
+
+    <form action="{{ url_for('retrieve_password_view') }}" method="POST">
+      <input type="text" name="label" placeholder="Enter Label (e.g., Gmail)" required>
+      <button type="submit" class="btn" style="display: block; margin-top: 20px;">Retrieve Password</button>
+    </form>
+
+    <form action="{{ url_for('delete_password') }}" method="POST" onsubmit="return confirm('⚠️ This will permanently delete the password for this label. Continue?');">
+  <input type="text" name="label" placeholder="Label to Delete (e.g., Gmail)" required>
+  <button type="submit" style="background-color: #007bff;">Delete Password</button>
+</form>
+
+
+    {% if password %}
+    <div id="passwordBox" class="password-box animate__animated animate__fadeIn">
+      <p>Your Password:</p>
+      <span id="passwordText">{{ password }}</span>
+      <br><br>
+      <button onclick="copyToClipboard()" class="copy-btn">Copy</button>
+      <div id="copyMsg" class="copy-msg">✔ Copied!</div>
+    </div>
+
+    <script>
+      setTimeout(() => {
+        const pwBox = document.getElementById("passwordBox");
+        if (pwBox) {
+          pwBox.classList.remove("animate__fadeIn");
+          pwBox.classList.add("animate__fadeOut");
+          setTimeout(() => pwBox.remove(), 1000);
+        }
+      }, 8000);
+
+      function copyToClipboard() {
+        const passwordText = document.getElementById("passwordText").textContent;
+        navigator.clipboard.writeText(passwordText).then(function () {
+          document.getElementById("copyMsg").style.display = "block";
+        });
+      }
+    </script>
+    {% endif %}
+
+    <!-- Back to dashboard button, separated with spacing -->
+    <a href="{{ url_for('dashboard') }}" class="btn" style="display: block; margin-top: 40px;">Back to Dashboard</a>
+  </div>
+</body>
+</html>
