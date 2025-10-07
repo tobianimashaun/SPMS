@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dashboard</title>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <!-- Animate.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  
+  <style>
+    body {
+      background: url("{{ url_for('static', filename='images/background.jpg') }}") no-repeat center center fixed;
+      background-size: cover;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .dashboard-box {
+      max-width: 450px;
+      margin: 80px auto;
+      background-color: rgba(255, 255, 255, 0.92);
+      border-radius: 15px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    .dashboard-box h2 {
+      margin-bottom: 25px;
+      color: #333;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    .btn {
+      display: inline-block;
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      background-color: #0056b3;
+    }
+
+    @media (max-width: 500px) {
+      .dashboard-box {
+        margin: 40px 15px;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="dashboard-box animate__animated animate__fadeInDown">
+    <h2>Welcome, {{ username }}</h2>
+
+    <!-- Generate & Store Password -->
+    <form action="{{ url_for('generate_password') }}" method="POST">
+      <input type="text" name="label" placeholder="Label (e.g., Gmail)" required>
+      <input type="number" name="length" placeholder="Password Length" min="8" max="32" required>
+      <button type="submit" class="btn">Generate & Store Password</button>
+    </form>
+
+    <!-- Retrieve Password -->
+    <a href="{{ url_for('retrieve_password_view') }}" class="btn">Retrieve Stored Password</a>
+
+    <!-- Logout -->
+    <form action="{{ url_for('logout') }}" method="POST">
+      <a href="{{ url_for('logout') }}" class="btn">Logout</a>
+    </form>
+    
+
+  </div>
+</body>
+</html>

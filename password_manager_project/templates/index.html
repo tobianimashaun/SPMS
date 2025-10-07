@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Password Manager</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  </head>
+  <body>
+  <div class="hero-background">
+    <div class="hero-container animate__animated animate__fadeInDown">
+      <h1 class="animate__animated animate__fadeInUp animate__delay-1s">
+        Welcome to Secure Password Manager
+      </h1>
+      <div class="button-group animate__animated animate__fadeInUp animate__delay-2s">
+        <a href="{{ url_for('register') }}" class="btn">Register</a>
+        <a href="{{ url_for('login') }}" class="btn">Login</a>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
